@@ -1,0 +1,5 @@
+[vagrant]
+192.168.111.3 ansible_ssh_user=vagrant home_dir=vagrant 
+
+[localhost]
+localhost ansible_connection=local

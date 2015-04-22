@@ -1,0 +1,32 @@
+---
+  - name: update apt packages
+    sudo: yes
+    apt: update_cache=yes
+
+  - name: install python-pip
+    sudo: yes
+    apt: name=python-pip state=present 
+
+  - name: copy compose files
+    synchronize: src=roles/docker-compose/tempalates/conf/ dest=~/ 
+
+  - name: install docker-compose
+    sudo: yes
+    pip: name=docker-compose state=latest extra_args=--upgrade
+    ignore_errors: yes
+
+  - name: create build django
+    sudo: yes
+    shell: docker-compose run web django-admin.py startproject composeexample . && \
+      docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+    ignore_errors: yes
+
+  - name: copy config build
+    sudo: yes
+    synchronize: src=roles/docker-compose/tempalates/composeexample/settings.py dest=~/composeexample/settings.py
+
+  - pause: seconds=10
+  
+  - name: start Django
+    sudo: yes
+    shell: docker-compose up &
