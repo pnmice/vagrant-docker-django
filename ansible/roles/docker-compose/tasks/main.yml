@@ -25,8 +25,3 @@
     sudo: yes
     synchronize: src=roles/docker-compose/tempalates/composeexample/settings.py dest=~/composeexample/settings.py
 
-  - pause: seconds=10
-  
-  - name: start Django
-    sudo: yes
-    shell: docker-compose up &
